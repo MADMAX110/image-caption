@@ -28,4 +28,5 @@ https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/eager/py
 2、模型  
 ![](https://github.com/wangru8080/image-caption/blob/master/pic/model.png)  
 3、测试  
-查看result.ipynb文件
+使用beam_search来生成图片描述  
+效果：查看result.ipynb文件
