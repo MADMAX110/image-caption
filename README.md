@@ -15,6 +15,7 @@ https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/eager/py
 ### Tutorial Overview
 1、数据划分、文本清洗、构建数据集，标签需要自己构造。  
 比如：对于two women stand on each side of the elephant来说，重新构造数据的方法：  
+
     image_feature     caption         label  
     ============== ================  ==================  
     photo              <start>                two               
