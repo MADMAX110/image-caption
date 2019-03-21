@@ -26,5 +26,6 @@ https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/eager/py
   
 每次将同一张图片和该图片描述前面的词输入模型，模型的输出是描述的后一个词  
 2、模型  
+![](https://github.com/wangru8080/image-caption/blob/master/pic/model.png)  
 3、测试  
 查看result.ipynb文件
