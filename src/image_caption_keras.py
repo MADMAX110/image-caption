@@ -12,68 +12,7 @@ os.environ['PATH'] += os.pathsep + 'D:/Graphviz2.38/bin'
 import warnings
 warnings.filterwarnings('ignore')
 
-# https://machinelearningmastery.com/develop-a-deep-learning-caption-generation-model-in-python/
-
-def MyModel1(max_len, vocab_size, embedding_size=256, dense_size=200, learing_rate=1e-3):
-    img_input = Input(shape=(2048,), dtype='float32', name='img_ipt')
-    img_vector = Dense(embedding_size, activation='relu')(img_input)
-    img_vector = Reshape((1, embedding_size))(img_vector) # [batch, 1, embedding_size]
-
-    caption_input = Input(shape=(max_len,), dtype='int32', name='caption_ipt')
-    caption_embedding = Embedding(input_dim=vocab_size,
-                                  output_dim=embedding_size,
-                                  input_length=max_len,
-                                  name='caption_embed')(caption_input) # [batch, seq_len, embedding_size]
-    embeddings = Concatenate(axis=1)([img_vector, caption_embedding]) # # [batch, seq_len + 1, embedding_size]
-    rnn = LSTM(embedding_size, return_sequences=True)(embeddings)
-    rnn = TimeDistributed(Dense(dense_size, activation='relu'))(rnn) # [batch, seq_len + 1, dense_size]
-    out = GlobalAveragePooling1D()(rnn)
-    out = Dense(vocab_size, activation='softmax')(out)
-
-    model = tf.keras.Model(inputs=[img_input, caption_input], outputs=out)
-    opt = tf.keras.optimizers.Adam(lr=learing_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
-    model.compile(optimizer=opt,
-                  loss='categorical_crossentropy',#tf.keras.losses.sparse_categorical_crossentropy,
-                  metrics=['accuracy'])
-    model.summary()
-    plot_model(model, show_shapes=True, to_file='model1.png')
-    return model
-
-def MyModel2(max_len, vocab_size, embedding_size=256, dense_size=200, learing_rate=1e-3):
-
-    # 输入为图片抽取的特征
-    img_input = Input(shape=(2048,), dtype='float32', name='img_ipt')
-    # 经过一层全连接层
-    img_vector = Dense(embedding_size, activation='relu')(img_input)
-    # 复制max_len次
-    img_vector = RepeatVector(max_len)(img_vector)
-
-    # 输入部分描述
-    caption_input = Input(shape=(max_len,), dtype='int32', name='caption_ipt')
-    # 进行词嵌入
-    caption_embedding = Embedding(vocab_size, embedding_size, input_length=max_len, mask_zero=True)(caption_input)
-    # 经过LSTM层，并保留每个时间步的输出
-    caption_embedding = LSTM(256, return_sequences=True)(caption_embedding)
-    # 对每个时间步的输出，分别应用一层全连接层
-    caption_embedding = TimeDistributed(Dense(dense_size, activation='relu'))(caption_embedding)
-
-    # 我们将两部分处理后的输入在最后一维进行拼接
-    out = Concatenate()([img_vector, caption_embedding])
-    # 再经过LSTM，输出最后一个时间步
-    out = LSTM(256)(out)
-    # 将全连接层的结果进行softmax，映射到词汇表每个词的概率
-    out = Dense(vocab_size, activation='softmax')(out)
-
-    model = tf.keras.Model(inputs=[img_input, caption_input], outputs=out)
-    opt = tf.keras.optimizers.Adam(lr=learing_rate, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
-    model.compile(optimizer=opt,
-                  loss='categorical_crossentropy',#tf.keras.losses.sparse_categorical_crossentropy,
-                  metrics=['accuracy'])
-    model.summary()
-    plot_model(model, show_shapes=True, to_file='model2.png')
-    return model
-
-def MyModel3(max_len, vocab_size, learing_rate=1e-3):
+def MyModel(max_len, vocab_size, learing_rate=1e-3):
     img_input = Input(shape=(2048,), dtype='float32', name='img_ipt')
     img_vector = Dropout(0.5)(img_input)
     img_vector = Dense(256, activation='relu')(img_vector)
@@ -95,7 +34,7 @@ def MyModel3(max_len, vocab_size, learing_rate=1e-3):
                   loss='categorical_crossentropy',#tf.keras.losses.sparse_categorical_crossentropy,
                   metrics=['accuracy'])
     model.summary()
-    plot_model(model, show_shapes=True, to_file='model3.png')
+    plot_model(model, show_shapes=True, to_file='model.png')
     return model
 
 def predict(model, max_len, word_index, index_word, img_feature):
@@ -148,7 +87,7 @@ if __name__ == '__main__':
     img_feature = get_img_feature(train['img_path'])
     img, cap, label = create_sequences(img_feature, cap_vector, max_len, vocab_size)
 
-    model = MyModel3(max_len=max_len,
+    model = MyModel(max_len=max_len,
                     vocab_size=vocab_size)
     model.fit([img, cap], label, epochs=20, batch_size=64)
 
