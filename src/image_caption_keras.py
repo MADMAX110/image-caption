@@ -6,9 +6,9 @@ import numpy as np
 import tensorflow as tf
 from data_helper import get_word_index, get_img_feature, data_generator, get_InceptionV3_image_feature, plot_image, create_sequences
 from tensorflow.keras.layers import Input, Dense, Reshape, Embedding, LSTM, Concatenate, TimeDistributed, GlobalAveragePooling1D, RepeatVector, Dropout, Add
-from tensorflow.keras.utils import plot_model
-import os
-os.environ['PATH'] += os.pathsep + 'D:/Graphviz2.38/bin'
+#from tensorflow.keras.utils import plot_model
+#import os
+#os.environ['PATH'] += os.pathsep + 'D:/Graphviz2.38/bin'
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -34,7 +34,7 @@ def MyModel(max_len, vocab_size, learing_rate=1e-3):
                   loss='categorical_crossentropy',#tf.keras.losses.sparse_categorical_crossentropy,
                   metrics=['accuracy'])
     model.summary()
-    plot_model(model, show_shapes=True, to_file='model.png')
+    #plot_model(model, show_shapes=True, to_file='model.png')
     return model
 
 def predict(model, max_len, word_index, index_word, img_feature):
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     model = MyModel(max_len=max_len,
                     vocab_size=vocab_size)
-    model.fit([img, cap], label, epochs=20, batch_size=64)
+    model.fit([img, cap], label, epochs=10, batch_size=64)
 
     model.save('models_checkpoints/model_sample_20000.h5')
 
