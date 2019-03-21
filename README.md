@@ -16,13 +16,13 @@ https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/eager/py
 1、数据划分、文本清洗、构建数据集，标签需要自己构造。  
 比如：对于two women stand on each side of the elephant来说，重新构造数据的方法：  
 
-    image_feature     caption         label  
+    image              caption         label  
     ============== ================  ==================  
-    photo              <start>                two               
-    photo           <start> two               women                 
-    photo         <start> two women           stand 
-    photo              ......                ......
-    photo     <start> two women stand on each side of the elephant   <end>  
+    image              <start>                two               
+    image           <start> two               women                 
+    image         <start> two women           stand 
+    image              ......                ......
+    image     <start> two women stand on each side of the elephant   <end>  
   
 每次将同一张图片和该图片描述前面的词输入模型，模型的输出是描述的后一个词  
 2、模型  
