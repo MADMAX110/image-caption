@@ -7,7 +7,7 @@ https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/eager/py
 
 ### Run
 1. python data_hepler.py  
-划分数据，使用了20000张图片  
+划分数据，使用了20000张图片, 并保存20000张图片特征  
 
 2. python image_caption_keras.py  
 开始训练，并保存模型  
