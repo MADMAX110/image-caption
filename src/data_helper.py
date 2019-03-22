@@ -136,4 +136,9 @@ def plot_image(path, sentence):
 
 if __name__ == '__main__':
     get_samples(num_examples=50000)
+    data = pd.read_csv('../data/data.csv')
+    img_path = data['img_path'][0]
+    feature = get_InceptionV3_image_feature(img_path)[0]
+    print(feature)
+    save_InceptionV3_feature(data['img_path'])
     get_train(train_size=20000)
